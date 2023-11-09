@@ -89,3 +89,20 @@ export function addPost({ description, imageUrl, token}) {
       return response.json();
     });
 }
+
+export function getUserPosts( id ) {
+  console.log(postsHost + "/user-posts/" + id);
+  return fetch(postsHost + "/user-posts/" + id, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      return data.posts;
+    });
+}

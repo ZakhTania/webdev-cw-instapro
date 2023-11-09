@@ -99,20 +99,12 @@ export function renderPostsPageComponent({ appEl }) {
     element: document.querySelector(".header-container"),
   });
 
-  for (let userEl of document.querySelectorAll(".post-header")) {
-    userEl.addEventListener("click", () => {
-      goToPage(USER_POSTS_PAGE, {
-        userId: userEl.dataset.userId,
-      });
-    });
-  }
-
   const listElements = document.querySelector(".posts");
 
   const postsHtml = posts
     .map((post) => {
       return `  <li class="post">
-                  <div class="post-header" data-user-id=${post.user.id}>
+                  <div class="post-header" data-userid=${post.user.id}>
                       <img src=${post.user.imageUrl} class="post-header__user-image">
                       <p class="post-header__user-name">${post.user.name}</p>
                   </div>
@@ -139,5 +131,15 @@ export function renderPostsPageComponent({ appEl }) {
     .join("");
 
   listElements.innerHTML = postsHtml;
+  
+  for (let userEl of document.querySelectorAll(".post-header")) {
+    userEl.addEventListener("click", () => {
+      const userId = userEl.dataset.userid;
+      console.log(userId);
+      goToPage(USER_POSTS_PAGE,
+        userId
+      );
+    });
+  }
 
 }
