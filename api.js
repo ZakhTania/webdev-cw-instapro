@@ -1,6 +1,6 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "zakharova-tatiana"
+const personalKey = "zakharova-tatiana";
 // const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
@@ -70,7 +70,7 @@ export function uploadImage({ file }) {
   });
 }
 
-export function addPost({ description, imageUrl, token}) {
+export function addPost({ description, imageUrl, token }) {
   return fetch(postsHost, {
     method: "POST",
     headers: {
@@ -81,16 +81,16 @@ export function addPost({ description, imageUrl, token}) {
       imageUrl,
     }),
   })
-    .then((response) => {
-      if (response.status === 400) {
-        throw new Error("Не переданы данные");
-      }
+  .then((response) => {
+    if (response.status === 400) {
+      throw new Error("Не переданы данные");
+    }
 
-      return response.json();
-    });
+    return response.json();
+  });
 }
 
-export function getUserPosts( id ) {
+export function getUserPosts(id) {
   console.log(postsHost + "/user-posts/" + id);
   return fetch(postsHost + "/user-posts/" + id, {
     method: "GET",
@@ -105,4 +105,20 @@ export function getUserPosts( id ) {
     .then((data) => {
       return data.posts;
     });
+}
+
+export function getLikes({ token, postId, endURL }) {
+
+  return fetch(`${postsHost}/${postId}/${endURL}`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    }
+
+    throw new Error("Что-то пошло не так");
+  });
 }
