@@ -39,11 +39,11 @@ export function renderPostsPageComponent({ appEl, token }) {
                     <img class="post-image" src=${post.imageUrl}>
                   </div>
                   <div class="post-likes" id="${post.id}">
-                    <button data-postid=${post.id} class="like-button">
+                    <button data-postid=${post.id} class="like-button" id=${post.isLiked ? `like` : `not-like`}>
                     ${
                       post.isLiked
-                        ? `<img src="./assets/images/like-active.svg" id="like">`
-                        : `<img src="./assets/images/like-not-active.svg" id="not-like">`
+                        ? `<img src="./assets/images/like-active.svg">`
+                        : `<img src="./assets/images/like-not-active.svg">`
                     }
                     </button>
                     <p class="post-likes-text">
@@ -80,16 +80,16 @@ export function renderPostsPageComponent({ appEl, token }) {
 
       let endURL = "";
 
-      if (document.getElementById("not-like")) {
+      if (btnLikes.getAttribute('id') === "not-like") {
         endURL = "like";
       }
-      if (document.getElementById("like")) {
+      if (btnLikes.getAttribute('id') === "like") {
         endURL = "dislike";
       }
 
       let postId = btnLikes.dataset.postid;
 
-      console.log(document.getElementById("like"));
+      console.log(btnLikes);
       console.log(endURL);
       getLikes({
         token,
