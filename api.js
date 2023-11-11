@@ -80,8 +80,7 @@ export function addPost({ description, imageUrl, token }) {
       description,
       imageUrl,
     }),
-  })
-  .then((response) => {
+  }).then((response) => {
     if (response.status === 400) {
       throw new Error("Не переданы данные");
     }
@@ -108,7 +107,6 @@ export function getUserPosts(id) {
 }
 
 export function getLikes({ token, postId, endURL }) {
-
   return fetch(`${postsHost}/${postId}/${endURL}`, {
     method: "POST",
     headers: {
@@ -119,6 +117,20 @@ export function getLikes({ token, postId, endURL }) {
       return response.json();
     }
 
+    throw new Error("Что-то пошло не так");
+  });
+}
+
+export function deleteUserPosts({token, id}) {
+  return fetch(`${postsHost}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    }
     throw new Error("Что-то пошло не так");
   });
 }

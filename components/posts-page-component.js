@@ -1,9 +1,9 @@
 import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
-import { getLikes } from "../api.js";
+import { deleteUserPosts, getLikes } from "../api.js";
 
-export function renderPostsPageComponent({ appEl, token }) {
+export function renderPostsPageComponent({ appEl, token, user }) {
   // TODO: реализовать рендер постов из api
   console.log("Актуальный список постов:", posts);
 
@@ -30,10 +30,19 @@ export function renderPostsPageComponent({ appEl, token }) {
     .map((post) => {
       return `  <li class="post">
                   <div class="post-header" data-userid=${post.user.id}>
+                    <div class="post-header_left">
                       <img src=${
                         post.user.imageUrl
                       } class="post-header__user-image">
                       <p class="post-header__user-name">${post.user.name}</p>
+                    </div>
+                      ${
+                        post.user.name === user.name 
+                        ? ` <button data-postid=${post.id} class="delete-button">
+                              <img src="./assets/images/delete_btn.png" class="delete-button_img">
+                            </button>` 
+                            : ``
+                          }
                   </div>
                   <div class="post-image-container">
                     <img class="post-image" src=${post.imageUrl}>
@@ -100,4 +109,15 @@ export function renderPostsPageComponent({ appEl, token }) {
       });
     });
   }
+
+for ( let btnDel of document.querySelectorAll(".delete-button")) {
+btnDel.addEventListener("click", () => {
+  let id = btnDel.dataset.postid;
+  deleteUserPosts({token, id})
+  .then (() => {
+    goToPage(POSTS_PAGE);
+  })
+})
+}
+
 }

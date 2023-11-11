@@ -34,7 +34,7 @@ export const logout = () => {
 /**
  * Включает страницу приложения
  */
-export const goToPage = (newPage, data) => {
+export const goToPage = (newPage, data, user) => {
   if (
     [
       POSTS_PAGE,
@@ -110,7 +110,7 @@ const renderApp = () => {
       setUser: (newUser) => {
         user = newUser;
         saveUserToLocalStorage(user);
-        goToPage(POSTS_PAGE);
+        goToPage(POSTS_PAGE, user);
       },
       user,
       goToPage,
@@ -134,7 +134,7 @@ const renderApp = () => {
 
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
-      appEl, token: getToken(),
+      appEl, token: getToken(), user
     });
   }
 
