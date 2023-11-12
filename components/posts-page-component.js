@@ -30,18 +30,20 @@ export function renderPostsPageComponent({ appEl, token, user }) {
     .map((post) => {
       return `  <li class="post">
                   <div class="post-header" data-userid=${post.user.id}>
-                    <div class="post-header_left">
+                    <div class="post-header__left">
                       <img src=${
                         post.user.imageUrl
                       } class="post-header__user-image">
                       <p class="post-header__user-name">${post.user.name}</p>
                     </div>
                       ${
-                        post.user.name === user.name 
-                        ? ` <button data-postid=${post.id} class="delete-button">
-                              <img src="./assets/images/delete_btn.png" class="delete-button_img">
+                        token 
+                        ? post.user.name === user.name 
+                          ? ` <button data-postid=${post.id} class="delete-button">
+                              <img src="./assets/images/delete_btn.png" class="delete-button_img" title="Удаление поста">
                             </button>` 
-                            : ``
+                          : ``
+                        :``
                           }
                   </div>
                   <div class="post-image-container">
