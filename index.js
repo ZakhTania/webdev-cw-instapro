@@ -34,7 +34,7 @@ export const logout = () => {
 /**
  * Включает страницу приложения
  */
-export const goToPage = (newPage, data, user) => {
+export const goToPage = (newPage, data) => {
   if (
     [
       POSTS_PAGE,
@@ -134,7 +134,7 @@ const renderApp = () => {
 
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
-      appEl, token: getToken(), user
+      appEl, token: getToken()
     });
   }
 
