@@ -15,7 +15,7 @@ export function removeUserFromLocalStorage(user) {
 }
 
 export function sanitizeHtml(htmlString) {
-  return htmlString
+  return htmlString.trim()
       .replaceAll('&', '&amp;')
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
