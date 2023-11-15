@@ -2,6 +2,8 @@ import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, user } from "../index.js";
 import { deleteUserPosts, getLikes } from "../api.js";
+import { ru } from "date-fns/locale";
+import { formatDistanceToNow } from "date-fns";
 
 export function renderPostsPageComponent({ appEl, token }) {
   // TODO: реализовать рендер постов из api
@@ -69,7 +71,7 @@ export function renderPostsPageComponent({ appEl, token }) {
                     ${post.description}
                   </p>
                   <p class="post-date">
-                  ${post.createdAt}
+                  ${formatDistanceToNow(new Date(post.createdAt), {addSuffix: true, locale: ru })}
                   </p>
                 </li>`;
     })
