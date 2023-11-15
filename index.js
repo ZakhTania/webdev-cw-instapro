@@ -128,9 +128,7 @@ const renderApp = () => {
         .catch((error) => {
           console.warn(error);
         })
-        // TODO: реализовать добавление поста в API
-        // console.log("Добавляю пост...", { description, imageUrl });
-        // goToPage(POSTS_PAGE);
+    
       },
     });
   }
@@ -141,11 +139,11 @@ const renderApp = () => {
     });
   }
 
-  if (page === USER_POSTS_PAGE) {
+  // if (page === USER_POSTS_PAGE) {
     // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
-  }
+  //   appEl.innerHTML = "Здесь будет страница фотографий пользователя";
+  //   return;
+  // }
 };
 
 goToPage(POSTS_PAGE);

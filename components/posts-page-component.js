@@ -6,13 +6,7 @@ import { ru } from "date-fns/locale";
 import { formatDistanceToNow } from "date-fns";
 
 export function renderPostsPageComponent({ appEl, token }) {
-  // TODO: реализовать рендер постов из api
-  console.log("Актуальный список постов:", posts);
 
-  /**
-   * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
-   * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-   */
   const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
@@ -82,7 +76,6 @@ export function renderPostsPageComponent({ appEl, token }) {
   for (let userEl of document.querySelectorAll(".post-header__left")) {
     userEl.addEventListener("click", () => {
       const userId = userEl.dataset.userid;
-      console.log(userId);
       goToPage(USER_POSTS_PAGE, userId);
     });
   }
@@ -112,8 +105,6 @@ export function renderPostsPageComponent({ appEl, token }) {
 
       let postId = btnLikes.dataset.postid;
 
-      console.log(btnLikes);
-      console.log(endURL);
       getLikes({
         token,
         postId,
