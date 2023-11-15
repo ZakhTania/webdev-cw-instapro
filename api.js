@@ -85,10 +85,13 @@ export function addPost({ description, imageUrl, token }) {
   });
 }
 
-export function getUserPosts(id) {
-  console.log(postsHost + "/user-posts/" + id);
+export function getUserPosts({id, token}) {
+
   return fetch(postsHost + "/user-posts/" + id, {
     method: "GET",
+    headers: {
+      Authorization: token,
+    },
   })
     .then((response) => {
       if (response.status === 401) {
@@ -110,6 +113,7 @@ export function getLikes({ token, postId, endURL }) {
     },
   }).then((response) => {
     if (response.status === 200) {
+
       return response.json();
     }
 

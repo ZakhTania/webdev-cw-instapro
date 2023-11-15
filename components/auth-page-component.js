@@ -24,14 +24,14 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                   ${
                     !isLoginMode
                       ? `
-                      <div class="upload-image-container"></div>
-                      <input type="text" id="name-input" class="input" placeholder="Имя" />
+                      <div class="upload-image-container input-del-error"></div>
+                      <input type="text" id="name-input" class="input input-del-error" placeholder="Имя" />
                       `
                       : ""
                   }
                   
-                  <input type="text" id="login-input" class="input" placeholder="Логин" />
-                  <input type="password" id="password-input" class="input" placeholder="Пароль" />
+                  <input type="text" id="login-input" class="input input-del-error" placeholder="Логин" />
+                  <input type="password" id="password-input" class="input input-del-error" placeholder="Пароль" />
                   
                   <div class="form-error"></div>
                   
@@ -158,6 +158,13 @@ export function renderAuthPageComponent({ appEl, setUser }) {
           });
       }
     });
+
+    for(let input of document.querySelectorAll(".input-del-error")) {
+      input.addEventListener("click", () => {
+      appEl.querySelector(".form-error").textContent = '';
+    })
+    }
+    
 
     document.getElementById("toggle-button").addEventListener("click", () => {
       isLoginMode = !isLoginMode;

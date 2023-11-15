@@ -10,11 +10,11 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       <div class="form">
         <h3 class="form-title">Добавить пост</h3>
         <div class="form-inputs">
-          <div class="upload-image-container" id="img-input">
+          <div class="upload-image-container click-del-err" id="img-input">
           </div>
           <label>
             Опишите фотографию:
-            <textarea class="input textarea" rows="4" id="text-input"></textarea>
+            <textarea class="input textarea click-del-err" rows="4" id="text-input"></textarea>
           </label>
 
           <div class="form-error"></div>
@@ -43,7 +43,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     document.getElementById("add-button").addEventListener("click", () => {
       const text = document.querySelector(".textarea");
       console.log(text);
-      if (!text) {
+      if (!text.value) {
         let message = "Добавьте описание фотографии";
         addRedBorder(document.getElementById("text-input"));
         setError(message);
@@ -65,7 +65,14 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
     renderHeaderComponent({
       element: document.querySelector(".header-container"),
     });
-  };
 
+    for (let input of document.querySelectorAll(".click-del-err")) {
+      input.addEventListener("click", () => {
+        console.log(input);
+        console.log(document.querySelector(".form-error"));
+        document.querySelector(".form-error").textContent = "";
+      });
+    }
+  };
   render();
 }

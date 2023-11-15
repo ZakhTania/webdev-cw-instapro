@@ -1,12 +1,13 @@
 import { USER_POSTS_PAGE, POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage, user } from "../index.js";
+import { posts, goToPage, user, page } from "../index.js";
 import { deleteUserPosts, getLikes } from "../api.js";
 import { ru } from "date-fns/locale";
 import { formatDistanceToNow } from "date-fns";
 
-export function renderPostsPageComponent({ appEl, token }) {
+let userId = null;
 
+export function renderPostsPageComponent({ appEl, token }) {
   const appHtml = `
               <div class="page-container">
                 <div class="header-container"></div>
@@ -65,7 +66,10 @@ export function renderPostsPageComponent({ appEl, token }) {
                     ${post.description}
                   </p>
                   <p class="post-date">
-                  ${formatDistanceToNow(new Date(post.createdAt), {addSuffix: true, locale: ru })}
+                  ${formatDistanceToNow(new Date(post.createdAt), {
+                    addSuffix: true,
+                    locale: ru,
+                  })}
                   </p>
                 </li>`;
     })
@@ -73,9 +77,11 @@ export function renderPostsPageComponent({ appEl, token }) {
 
   listElements.innerHTML = postsHtml;
 
+
+
   for (let userEl of document.querySelectorAll(".post-header__left")) {
     userEl.addEventListener("click", () => {
-      const userId = userEl.dataset.userid;
+      userId = userEl.dataset.userid;
       goToPage(USER_POSTS_PAGE, userId);
     });
   }
@@ -110,16 +116,17 @@ export function renderPostsPageComponent({ appEl, token }) {
         postId,
         endURL,
       }).then(() => {
-        goToPage(POSTS_PAGE);
+        goToPage(page, userId);
       });
     });
   }
 
   for (let btnDel of document.querySelectorAll(".delete-button")) {
+
     btnDel.addEventListener("click", () => {
       let id = btnDel.dataset.postid;
       deleteUserPosts({ token, id }).then(() => {
-        goToPage(POSTS_PAGE);
+        goToPage(page, userId);
       });
     });
   }
