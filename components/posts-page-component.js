@@ -29,28 +29,30 @@ export function renderPostsPageComponent({ appEl, token }) {
   const postsHtml = posts
     .map((post) => {
       return `  <li class="post">
-                  <div class="post-header" data-userid=${post.user.id}>
-                    <div class="post-header__left">
+                  <div class="post-header">
+                    <div class="post-header__left" data-userid=${post.user.id}>
                       <img src=${
                         post.user.imageUrl
                       } class="post-header__user-image">
                       <p class="post-header__user-name">${post.user.name}</p>
                     </div>
                       ${
-                        token 
-                        ? post.user.name === user.name 
-                          ? ` <button data-postid=${post.id} class="delete-button">
-                              <img src="./assets/images/delete_btn.png" class="delete-button_img" title="Удаление поста">
-                            </button>` 
+                        token
+                          ? post.user.name === user.name
+                            ? ` <button data-postid=${post.id} class="delete-button">
+                              <img src="./assets/images/delete_btn.png" class="delete-button_img" title="Удалить пост">
+                            </button>`
+                            : ``
                           : ``
-                        :``
-                          }
+                      }
                   </div>
                   <div class="post-image-container">
                     <img class="post-image" src=${post.imageUrl}>
                   </div>
                   <div class="post-likes" id="${post.id}">
-                    <button data-postid=${post.id} class="like-button" id=${post.isLiked ? `like` : `not-like`}>
+                    <button data-postid=${post.id} class="like-button" id=${
+        post.isLiked ? `like` : `not-like`
+      }> 
                     ${
                       post.isLiked
                         ? `<img src="./assets/images/like-active.svg">`
@@ -61,6 +63,7 @@ export function renderPostsPageComponent({ appEl, token }) {
                       Нравится: <strong>${post.likes.length}</strong>
                     </p>
                   </div>
+                  <div class="form-error" data-postid=${post.id}></div>
                   <p class="post-text">
                     <span class="user-name">${post.user.name}</span>
                     ${post.description}
@@ -74,7 +77,7 @@ export function renderPostsPageComponent({ appEl, token }) {
 
   listElements.innerHTML = postsHtml;
 
-  for (let userEl of document.querySelectorAll(".post-header")) {
+  for (let userEl of document.querySelectorAll(".post-header__left")) {
     userEl.addEventListener("click", () => {
       const userId = userEl.dataset.userid;
       console.log(userId);
@@ -84,17 +87,24 @@ export function renderPostsPageComponent({ appEl, token }) {
 
   for (let btnLikes of document.querySelectorAll(".like-button")) {
     btnLikes.addEventListener("click", () => {
+      const id = btnLikes.dataset.postid;
       if (!token) {
-        alert("Только авторизированные пользователи могут лайкать посты");
-        return;
+        for (let formError of document.querySelectorAll(".form-error"))
+          if (formError.getAttribute("data-postid") === id) {
+            formError.textContent = `Только авторизированные пользователи могут лайкать посты`;
+            setTimeout(() => {
+              formError.textContent = "";
+            }, 2000);
+            // alert("Только авторизированные пользователи могут лайкать посты");
+            return;
+          }
       }
-
       let endURL = "";
 
-      if (btnLikes.getAttribute('id') === "not-like") {
+      if (btnLikes.getAttribute("id") === "not-like") {
         endURL = "like";
       }
-      if (btnLikes.getAttribute('id') === "like") {
+      if (btnLikes.getAttribute("id") === "like") {
         endURL = "dislike";
       }
 
@@ -112,14 +122,12 @@ export function renderPostsPageComponent({ appEl, token }) {
     });
   }
 
-for ( let btnDel of document.querySelectorAll(".delete-button")) {
-btnDel.addEventListener("click", () => {
-  let id = btnDel.dataset.postid;
-  deleteUserPosts({token, id})
-  .then (() => {
-    goToPage(POSTS_PAGE);
-  })
-})
-}
-
+  for (let btnDel of document.querySelectorAll(".delete-button")) {
+    btnDel.addEventListener("click", () => {
+      let id = btnDel.dataset.postid;
+      deleteUserPosts({ token, id }).then(() => {
+        goToPage(POSTS_PAGE);
+      });
+    });
+  }
 }

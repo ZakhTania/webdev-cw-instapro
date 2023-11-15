@@ -21,3 +21,10 @@ export function sanitizeHtml(htmlString) {
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;');
 }
+
+export function addRedBorder (element) {
+ element.style.border = "3px solid red";
+element.addEventListener("click", () => {
+element.style.border = "";
+})
+}

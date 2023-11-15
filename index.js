@@ -125,6 +125,9 @@ const renderApp = () => {
         .then(() => {
         goToPage(POSTS_PAGE);
         })
+        .catch((error) => {
+          console.warn(error);
+        })
         // TODO: реализовать добавление поста в API
         // console.log("Добавляю пост...", { description, imageUrl });
         // goToPage(POSTS_PAGE);
