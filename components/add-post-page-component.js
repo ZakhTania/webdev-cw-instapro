@@ -1,21 +1,20 @@
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
-import { sanitizeHtml } from "../helpers.js";
+import { sanitizeHtml, addRedBorder } from "../helpers.js";
 
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
-    
     const appHtml = `
     <div class="page-container">
       <div class="header-container"></div>
       <div class="form">
         <h3 class="form-title">Добавить пост</h3>
         <div class="form-inputs">
-          <div class="upload-image-container">
+          <div class="upload-image-container" id="img-input">
           </div>
           <label>
             Опишите фотографию:
-            <textarea class="input textarea" rows="4"></textarea>
+            <textarea class="input textarea" rows="4" id="text-input"></textarea>
           </label>
 
           <div class="form-error"></div>
@@ -37,11 +36,30 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       },
     });
 
+    const setError = (message) => {
+      appEl.querySelector(".form-error").textContent = message;
+    };
+
     document.getElementById("add-button").addEventListener("click", () => {
+      const text = document.querySelector(".textarea");
+      console.log(text);
+      if (!text) {
+        let message = "Добавьте описание фотографии";
+        addRedBorder(document.getElementById("text-input"));
+        setError(message);
+        return;
+      }
+      if (!imageUrl) {
+        let message = "Добавьте фото";
+        addRedBorder(document.getElementById("img-input"));
+        setError(message);
+        return;
+      }
+
       onAddPostClick({
-        description: sanitizeHtml(document.querySelector(".textarea").value),
+        description: sanitizeHtml(text.value),
         imageUrl,
-      })
+      });
     });
 
     renderHeaderComponent({
