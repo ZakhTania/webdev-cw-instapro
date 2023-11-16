@@ -115,8 +115,12 @@ export function renderPostsPageComponent({ appEl, token }) {
         token,
         postId,
         endURL,
-      }).then(() => {
+      })
+      .then(() => {
         goToPage(page, userId);
+      })
+      .catch((error) => {
+        console.error(error);
       });
     });
   }
@@ -127,6 +131,9 @@ export function renderPostsPageComponent({ appEl, token }) {
       let id = btnDel.dataset.postid;
       deleteUserPosts({ token, id }).then(() => {
         goToPage(page, userId);
+      })
+      .catch((error) => {
+        console.error(error);
       });
     });
   }

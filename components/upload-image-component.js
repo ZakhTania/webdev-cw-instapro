@@ -37,10 +37,14 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
         const lableEl = document.querySelector(".file-upload-label");
         lableEl.setAttribute("disabled", true);
         lableEl.textContent = "Загружаю файл...";
-        uploadImage({ file }).then(({ fileUrl }) => {
+        uploadImage({ file })
+        .then(({ fileUrl }) => {
           imageUrl = fileUrl;
           onImageUrlChange(imageUrl);
           render();
+        })
+        .catch((error) => {
+          console.error(error);
         });
       }
     });

@@ -11,11 +11,14 @@ export function getPosts({ token }) {
     },
   })
     .then((response) => {
+      if(response.status === 200) {
+       return response.json(); 
+      }
       if (response.status === 401) {
         throw new Error("Нет авторизации");
       }
 
-      return response.json();
+      throw new Error("Что-то пошло не так");
     })
     .then((data) => {
       return data.posts;
@@ -32,10 +35,13 @@ export function registerUser({ login, password, name, imageUrl }) {
       imageUrl,
     }),
   }).then((response) => {
+    if(response.status === 201) {
+      return response.json(); 
+     }
     if (response.status === 400) {
       throw new Error("Такой пользователь уже существует");
     }
-    return response.json();
+    throw new Error("Что-то пошло не так");
   });
 }
 
@@ -47,10 +53,13 @@ export function loginUser({ login, password }) {
       password,
     }),
   }).then((response) => {
+    if(response.status === 201) {
+      return response.json(); 
+     }
     if (response.status === 400) {
       throw new Error("Неверный логин или пароль");
     }
-    return response.json();
+    throw new Error("Что-то пошло не так");
   });
 }
 
@@ -62,7 +71,10 @@ export function uploadImage({ file }) {
     method: "POST",
     body: data,
   }).then((response) => {
-    return response.json();
+    if(response.status === 200) {
+      return response.json(); 
+     }
+     throw new Error("Что-то пошло не так");
   });
 }
 
@@ -94,11 +106,14 @@ export function getUserPosts({id, token}) {
     },
   })
     .then((response) => {
+      if(response.status === 200) {
+        return response.json(); 
+       }
       if (response.status === 401) {
         throw new Error("Нет авторизации");
       }
 
-      return response.json();
+      throw new Error("Что-то пошло не так");
     })
     .then((data) => {
       return data.posts;
