@@ -1,4 +1,4 @@
-import { getPosts } from "./api.js";
+import { addPost, getPosts, getUserPosts } from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -67,11 +67,21 @@ export const goToPage = (newPage, data) => {
     }
 
     if (newPage === USER_POSTS_PAGE) {
-      // TODO: реализовать получение постов юзера из API
-      console.log("Открываю страницу пользователя: ", data.userId);
+  
       page = USER_POSTS_PAGE;
       posts = [];
-      return renderApp();
+  
+      
+      return getUserPosts({id: data, token: getToken()})
+        .then((newPosts) => {
+       
+          posts = newPosts;
+          renderApp();
+        })
+        .catch((error) => {
+          console.error(error);
+          goToPage(POSTS_PAGE);
+        });
     }
 
     page = newPage;
@@ -99,7 +109,7 @@ const renderApp = () => {
       setUser: (newUser) => {
         user = newUser;
         saveUserToLocalStorage(user);
-        goToPage(POSTS_PAGE);
+        goToPage(POSTS_PAGE, user);
       },
       user,
       goToPage,
@@ -110,23 +120,30 @@ const renderApp = () => {
     return renderAddPostPageComponent({
       appEl,
       onAddPostClick({ description, imageUrl }) {
-        // TODO: реализовать добавление поста в API
-        console.log("Добавляю пост...", { description, imageUrl });
+        addPost({description, imageUrl, token:getToken()})
+        .then(() => {
         goToPage(POSTS_PAGE);
+        })
+        .catch((error) => {
+          console.warn(error);
+        })
+    
       },
     });
   }
 
   if (page === POSTS_PAGE) {
     return renderPostsPageComponent({
-      appEl,
+      appEl, token: getToken()
     });
   }
 
   if (page === USER_POSTS_PAGE) {
-    // TODO: реализовать страницу фотографию пользвателя
-    appEl.innerHTML = "Здесь будет страница фотографий пользователя";
-    return;
+  
+    return renderPostsPageComponent({
+      appEl, token: getToken()
+    });
+ 
   }
 };
 

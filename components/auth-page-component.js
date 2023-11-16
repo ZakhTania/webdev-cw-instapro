@@ -1,6 +1,7 @@
 import { loginUser, registerUser } from "../api.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { renderUploadImageComponent } from "./upload-image-component.js";
+import { addRedBorder, sanitizeHtml } from "../helpers.js";
 
 export function renderAuthPageComponent({ appEl, setUser }) {
   let isLoginMode = true;
@@ -23,14 +24,14 @@ export function renderAuthPageComponent({ appEl, setUser }) {
                   ${
                     !isLoginMode
                       ? `
-                      <div class="upload-image-container"></div>
-                      <input type="text" id="name-input" class="input" placeholder="Имя" />
+                      <div class="upload-image-container input-del-error"></div>
+                      <input type="text" id="name-input" class="input input-del-error" placeholder="Имя" />
                       `
                       : ""
                   }
                   
-                  <input type="text" id="login-input" class="input" placeholder="Логин" />
-                  <input type="password" id="password-input" class="input" placeholder="Пароль" />
+                  <input type="text" id="login-input" class="input input-del-error" placeholder="Логин" />
+                  <input type="password" id="password-input" class="input input-del-error" placeholder="Пароль" />
                   
                   <div class="form-error"></div>
                   
@@ -53,9 +54,7 @@ export function renderAuthPageComponent({ appEl, setUser }) {
 `;
 
     appEl.innerHTML = appHtml;
-
-    // Не вызываем перерендер, чтобы не сбрасывалась заполненная форма
-    // Точечно обновляем кусочек дом дерева
+    
     const setError = (message) => {
       appEl.querySelector(".form-error").textContent = message;
     };
@@ -79,16 +78,22 @@ export function renderAuthPageComponent({ appEl, setUser }) {
       setError("");
 
       if (isLoginMode) {
-        const login = document.getElementById("login-input").value;
+        const login = sanitizeHtml(document.getElementById("login-input").value);
         const password = document.getElementById("password-input").value;
 
         if (!login) {
-          alert("Введите логин");
+          // alert("Введите логин");
+          let message = "Введите логин";
+          addRedBorder(document.getElementById("login-input"));
+          setError(message);
           return;
         }
 
         if (!password) {
-          alert("Введите пароль");
+          // alert("Введите пароль");
+          let message = "Введите пароль";
+          addRedBorder(document.getElementById("password-input"));
+          setError(message);
           return;
         }
 
@@ -104,25 +109,37 @@ export function renderAuthPageComponent({ appEl, setUser }) {
             setError(error.message);
           });
       } else {
-        const login = document.getElementById("login-input").value;
-        const name = document.getElementById("name-input").value;
+        const login = sanitizeHtml(document.getElementById("login-input").value);
+        const name = sanitizeHtml(document.getElementById("name-input").value);
         const password = document.getElementById("password-input").value;
         if (!name) {
-          alert("Введите имя");
+          // alert("Введите имя");
+          let message = "Введите имя";
+          addRedBorder(document.getElementById("name-input"));
+          setError(message);
           return;
         }
         if (!login) {
-          alert("Введите логин");
+          // alert("Введите логин");
+          addRedBorder(document.getElementById("login-input"));
+          let message = "Введите логин";
+          setError(message);
           return;
         }
 
         if (!password) {
-          alert("Введите пароль");
+          // alert("Введите пароль");
+          addRedBorder(document.getElementById("password-input"));
+          let message = "Введите пароль";
+          setError(message);
           return;
         }
 
         if (!imageUrl) {
-          alert("Не выбрана фотография");
+          // alert("Не выбрана фотография");
+          addRedBorder(document.querySelector(".upload-image-container"));
+          let message = "Не выбрана фотография";
+          setError(message);
           return;
         }
 
@@ -141,6 +158,13 @@ export function renderAuthPageComponent({ appEl, setUser }) {
           });
       }
     });
+
+    for(let input of document.querySelectorAll(".input-del-error")) {
+      input.addEventListener("click", () => {
+      appEl.querySelector(".form-error").textContent = '';
+    })
+    }
+    
 
     document.getElementById("toggle-button").addEventListener("click", () => {
       isLoginMode = !isLoginMode;

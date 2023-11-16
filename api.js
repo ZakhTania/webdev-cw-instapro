@@ -1,6 +1,5 @@
-// Замени на свой, чтобы получить независимый от других набор данных.
-// "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+const personalKey = "zakharova-tatiana";
+// const personalKey = "prod";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
@@ -12,18 +11,20 @@ export function getPosts({ token }) {
     },
   })
     .then((response) => {
+      if(response.status === 200) {
+       return response.json(); 
+      }
       if (response.status === 401) {
         throw new Error("Нет авторизации");
       }
 
-      return response.json();
+      throw new Error("Что-то пошло не так");
     })
     .then((data) => {
       return data.posts;
     });
 }
 
-// https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md#%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F
 export function registerUser({ login, password, name, imageUrl }) {
   return fetch(baseHost + "/api/user", {
     method: "POST",
@@ -34,10 +35,13 @@ export function registerUser({ login, password, name, imageUrl }) {
       imageUrl,
     }),
   }).then((response) => {
+    if(response.status === 201) {
+      return response.json(); 
+     }
     if (response.status === 400) {
       throw new Error("Такой пользователь уже существует");
     }
-    return response.json();
+    throw new Error("Что-то пошло не так");
   });
 }
 
@@ -49,14 +53,16 @@ export function loginUser({ login, password }) {
       password,
     }),
   }).then((response) => {
+    if(response.status === 201) {
+      return response.json(); 
+     }
     if (response.status === 400) {
       throw new Error("Неверный логин или пароль");
     }
-    return response.json();
+    throw new Error("Что-то пошло не так");
   });
 }
 
-// Загружает картинку в облако, возвращает url загруженной картинки
 export function uploadImage({ file }) {
   const data = new FormData();
   data.append("file", file);
@@ -65,6 +71,81 @@ export function uploadImage({ file }) {
     method: "POST",
     body: data,
   }).then((response) => {
+    if(response.status === 200) {
+      return response.json(); 
+     }
+     throw new Error("Что-то пошло не так");
+  });
+}
+
+export function addPost({ description, imageUrl, token }) {
+  return fetch(postsHost, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+    body: JSON.stringify({
+      description,
+      imageUrl,
+    }),
+  }).then((response) => {
+    if (response.status === 400) {
+      throw new Error("Не переданы данные");
+    }
+
     return response.json();
+  });
+}
+
+export function getUserPosts({id, token}) {
+
+  return fetch(postsHost + "/user-posts/" + id, {
+    method: "GET",
+    headers: {
+      Authorization: token,
+    },
+  })
+    .then((response) => {
+      if(response.status === 200) {
+        return response.json(); 
+       }
+      if (response.status === 401) {
+        throw new Error("Нет авторизации");
+      }
+
+      throw new Error("Что-то пошло не так");
+    })
+    .then((data) => {
+      return data.posts;
+    });
+}
+
+export function getLikes({ token, postId, endURL }) {
+  return fetch(`${postsHost}/${postId}/${endURL}`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+
+      return response.json();
+    }
+
+    throw new Error("Что-то пошло не так");
+  });
+}
+
+export function deleteUserPosts({token, id}) {
+  return fetch(`${postsHost}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    }
+    throw new Error("Что-то пошло не так");
   });
 }

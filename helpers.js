@@ -13,3 +13,18 @@ export function getUserFromLocalStorage(user) {
 export function removeUserFromLocalStorage(user) {
   window.localStorage.removeItem("user");
 }
+
+export function sanitizeHtml(htmlString) {
+  return htmlString.trim()
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+}
+
+export function addRedBorder (element) {
+ element.style.border = "3px solid red";
+element.addEventListener("click", () => {
+element.style.border = "";
+})
+}

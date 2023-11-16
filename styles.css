@@ -1,5 +1,16 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+ background-color: #e0e0e081;  
+}
+
 .page-container {
   padding: 0 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .page-header {
@@ -7,9 +18,10 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e0e0e0;
-  padding: 20px 16px;
+  padding: 5px 16px;
   margin-left: -20px;
   margin-right: -20px;
+  background-color: #fff;
 }
 
 .logo {
@@ -19,12 +31,8 @@
   width: 130px;
 }
 
-.header-container {
-  margin-bottom: 8px;
-}
-
 .header-button {
-  padding: 0;
+  padding: 10px;
   border: none;
   background-color: transparent;
   font-size: 14px;
@@ -38,20 +46,46 @@
   text-align: right;
 }
 
+.post {
+  padding: 20px;
+  box-shadow: 0 0 5px #e0e0e063;
+  border-radius: 20px;
+  background-color: white;
+}
+
 .posts {
   display: flex;
   flex-direction: column;
+  align-items: center;
   list-style: none;
-  padding: 0;
+  padding: 8px 0 0 0;
   margin: 0;
+  /* background-color: #e0e0e081; */
 }
 
 .post-header {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+
+}
+
+.post-header__left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   cursor: pointer;
+  padding: 8px;
+}
+
+.post-header__left:hover,
+.header-button:hover,
+.delete-button_img:hover,
+.like-button:hover {
+  background-color: #e0e0e09f;
+  border-radius: 20px;
 }
 
 .post-header__user-image {
@@ -63,12 +97,13 @@
 }
 
 .post-image-container {
-  margin-left: -20px;
+  /* margin-left: -20px;
   margin-right: -20px;
-  height: 500px;
+  height: 500px; */
+  width: 600px;
   display: flex;
   justify-content: center;
-  background-color: #e0e0e0;
+
 }
 
 .post-image {
@@ -87,8 +122,7 @@
 .like-button {
   border: none;
   background-color: transparent;
-  padding: 8px;
-  padding-left: 0px;
+  padding: 10px;
   padding-bottom: 5px;
   cursor: pointer;
 }
@@ -107,7 +141,7 @@
   color: #8a8a8a;
 }
 
-.post + .post {
+.post+.post {
   margin-top: 20px;
 }
 
@@ -144,9 +178,15 @@
 }
 
 .form {
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 484px;
+  align-self: center;
+  padding: 20px;
+  box-shadow: 0 0 5px #e0e0e063;
+  border-radius: 20px;
+  background-color: white;
 }
 
 .form-title {
@@ -156,6 +196,7 @@
 }
 
 .form-inputs {
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -195,4 +236,16 @@
   box-sizing: border-box;
   width: 100%;
   text-align: center;
+}
+
+.delete-button {
+  border: none;
+  background-color: transparent;
+}
+
+.delete-button_img {
+  height: 19px;
+  width: 22px;
+  padding: 10px;
+  cursor: pointer;
 }
